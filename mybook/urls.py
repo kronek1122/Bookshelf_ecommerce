@@ -5,4 +5,5 @@ from . import views
 app_name = 'mybook'
 urlpatterns = [
     path('', views.home, name='home'),
+    path('my_view', views.user_view, name='my_view')
 ]

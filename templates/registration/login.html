@@ -1,11 +1,15 @@
-
 {% extends 'base.html' %}
-
 {% block content %}
+
 {% if form.error %}
     <p> Your username or password was incorrect. Try again. </p>
 {% endif %}
 
+{% if next %}
+    {% if user.is_authenticated %}
+        <p> You don't have permission for this page </p>
+    {% endif %}
+{% endif %}
 
 <form class='container-sm' method='post' action="{% url 'login' %}">
 {% csrf_token %}
