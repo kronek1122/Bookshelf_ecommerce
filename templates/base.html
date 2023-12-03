@@ -29,7 +29,8 @@
               <div class="dropdown text-end">
               <div class="dropdown text-end">
                 <a class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="../../poligon/login pic.jpg" alt="mdo" width="32" height="32" class="rounded-circle">
+                  {% load static %}
+                  <img src="{% static 'mybook/user-pic.jpg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu text-small">
                   <li><a class="dropdown-item" href="/mybook/profile">{{user.get_username}}</a></li>
@@ -60,7 +61,7 @@
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
         <li class="nav-item"><a href="/" class="nav-link px-2 text-body-secondary">Home</a></li>
         <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Board</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Books</a></li>
+        <li class="nav-item"><a href="/mybook/books" class="nav-link px-2 text-body-secondary">Books</a></li>
         <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
         <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
         </ul>
