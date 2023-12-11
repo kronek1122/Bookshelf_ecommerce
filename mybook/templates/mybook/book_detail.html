@@ -3,7 +3,19 @@
 
 {% block content %}
 
-<h1>Book detail</h1>
-{{book}}
+<body>
+    <h1>{{ object.title }}</h1>
+    <p>Author: {{ object.author }}</p>
+    <p>ISBN: {{ object.isbn }}</p>
+
+    <h2>Genres:</h2>
+    <ul>
+        {% for genre in genres %}
+            <li>{{ genre.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
 
 {% endblock content%}

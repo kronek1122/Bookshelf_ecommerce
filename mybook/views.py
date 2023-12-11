@@ -32,6 +32,12 @@ class BookCreate(LoginRequiredMixin,CreateView):
 class BookDetail(DetailView):
     model=Book
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = context['object']
+        context['genres'] = book.genre.all()
+        return context
+
 
 class BookList(ListView):
     model=Book
