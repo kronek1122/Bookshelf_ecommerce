@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Genre(models.Model):
@@ -26,3 +27,22 @@ class Author(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+
+class UserShelf(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    read_books = models.ManyToManyField('Book', related_name='read_books', blank=True)
+    to_read_books = models.ManyToManyField('Book', related_name='to_read_books', blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Shelf"
+
+
+class ReadBook(models.Model):
+    shelf = models.ForeignKey(UserShelf, on_delete=models.CASCADE)
+    book = models.ForeignKey('Book', on_delete=models.CASCADE)
+    read_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.shelf.user.username} read {self.book.title} on {self.read_date}"
+
