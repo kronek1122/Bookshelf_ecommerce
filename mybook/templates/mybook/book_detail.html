@@ -4,9 +4,9 @@
 {% block content %}
 
 <body>
-    <h1>{{ object.title }}</h1>
-    <p>Author: {{ object.author }}</p>
-    <p>ISBN: {{ object.isbn }}</p>
+    <h1>{{ book_detail.title }}</h1>
+    <p>Author: {{  book_detail.author }}</p>
+    <p>ISBN: {{  book_detail.isbn }}</p>
 
     <h2>Genres:</h2>
     <ul>
@@ -14,8 +14,17 @@
             <li>{{ genre.name }}</li>
         {% endfor %}
     </ul>
+    
+    <form method="post" action="{% url 'mybook:book_detail' pk=book_detail.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit" name="action" value="add_to_read">Add to "Read"</button>
+      </form>
+      
+      <form method="post" action="{% url 'mybook:book_detail' pk=book_detail.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit" name="action" value="add_to_to_read">Add to "To Read"</button>
+      </form>
+    
 </body>
-</html>
-
 
 {% endblock content%}

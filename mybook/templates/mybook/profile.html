@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>User view</h1>
+<body>
+    <h1>Welcome, {{user.username}}!</h1>
+
+    <h2>Read Books:</h2>
+    <ul>
+        {% for book in read_books %}
+        <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h2>To Read Books:</h2>
+    <ul>
+        {% for book in to_read_books %}
+        <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
+        {% endfor %}
+    </ul>
+</body>
 
 {% endblock content%}
