@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<body>
+    <h1>Welcome, {{user.username}}!</h1>
+    <div class="list-group">
+        <a href="/mybook/change_password/" class="list-group-item list-group-item-action">Change password</a>
+        <a href="#" class="list-group-item list-group-item-action">Change personal information</a>
+        <a href="#" class="list-group-item list-group-item-action">Change e-mail</a>
+        <a href="#" class="list-group-item list-group-item-action">Change username</a>
+
+      </div>
+</body>
+
+{% endblock content%}

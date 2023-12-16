@@ -35,7 +35,7 @@
                 <ul class="dropdown-menu text-small">
                   <li><a class="dropdown-item" href="/mybook/profile">{{user.get_username}}</a></li>
                   <li><a class="dropdown-item" href="/mybook/create_book">Add new book</a></li>
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><a class="dropdown-item" href="/mybook/settings">Settings</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="{% url 'logout' %}?next={{request.path}}">Logout</a></li>
                 </ul>
