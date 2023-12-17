@@ -3,6 +3,14 @@
 
 {% block content %}
 
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
 <body>
     <h1>{{ book_detail.title }}</h1>
     <p>Author: {{  book_detail.author }}</p>
