@@ -12,4 +12,5 @@ urlpatterns = [
     path('books/', views.BookList.as_view(), name='book_list'),
     path('change_password/', views.UserPasswordChangeView.as_view(), name = 'change_password'),
     path('settings/', views.user_settings, name='user_settings'),
+    path('delete_user/', views.delete_user, name='delete_user' ),
 ]

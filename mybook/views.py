@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView, DetailView, ListView
 
-from .models import Book, UserShelf
+from .models import Book, UserShelf, User
 
 
 def home(request):
@@ -28,13 +28,32 @@ def user_view(request):
         }
     except:
         context = {
-            'read_books': 'empty',
-            'to_read_books': 'empty',
+            'read_books': '',
+            'to_read_books': '',
         }
 
     return render(request, 'mybook/profile.html', context)
 
 
+@login_required
+def delete_user(request):
+    if request.method == 'POST':
+        confirmation = request.POST.get('confirmation')
+
+        if confirmation.lower() == request.user.username.lower():
+            request.user.delete()
+            messages.success(request, 'Your account has been successfully deleted')
+            return redirect('home')
+
+        else:
+            messages.error(request, 'Invalid confirmation. Your account was not deleted')
+            
+    
+    return render(request, 'mybook/delete_user.html')
+
+
+
+@login_required
 def user_settings(request):
     return render(request, 'mybook/setting_page.html')
 
