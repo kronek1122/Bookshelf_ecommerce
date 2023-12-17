@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView, DetailView, ListView
 
 from .models import Book, UserShelf
-from .forms import AddToShelfForm
 
 
 def home(request):
@@ -34,23 +33,6 @@ def user_view(request):
         }
 
     return render(request, 'mybook/profile.html', context)
-
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, 'Your password was successfully updated')
-            return redirect('/mybook/settings')
-        else:
-            messages.error(request, 'Please correct the error below')
-    else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'mybook/change_password.html', {
-        'form':form
-    })
 
 
 def user_settings(request):
@@ -108,3 +90,5 @@ class BookList(ListView):
     context_object_name = 'book_list'
 
 
+class UserPasswordChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
