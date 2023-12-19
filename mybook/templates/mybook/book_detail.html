@@ -23,16 +23,39 @@
         {% endfor %}
     </ul>
     
-    <form method="post" action="{% url 'mybook:book_detail' pk=book_detail.pk %}">
-        {% csrf_token %}
-        <button class="btn btn-primary" type="submit" name="action" value="add_to_read">Add to "Read"</button>
-      </form>
-      
-      <form method="post" action="{% url 'mybook:book_detail' pk=book_detail.pk %}">
-        {% csrf_token %}
-        <button class="btn btn-primary" type="submit" name="action" value="add_to_to_read">Add to "To Read"</button>
-      </form>
     
+    
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddToShelf">
+        Add to bookshelf
+    </button>
+    
+    <div class="modal fade" id="AddToShelf" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="AddToShelfLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="AddToShelfLabel">Add to user bookshelf</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'mybook:book_detail' pk=book_detail.pk %}">
+                        {% csrf_token %}
+                        
+                        <label>
+                            <input type="radio" name="action" value="add_to_read"> Add to "Read"
+                        </label>
+                        
+                        <label>
+                            <input type="radio" name="action" value="add_to_to_read"> Add to "To Read"
+                        </label>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                    </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
 </body>
 
 {% endblock content%}
