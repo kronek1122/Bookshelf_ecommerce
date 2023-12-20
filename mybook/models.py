@@ -17,14 +17,11 @@ class Book(models.Model):
     isbn = models.CharField('ISBN',max_length=13,unique=True)
     genre = models.ManyToManyField(Genre)
 
-    review = models.TextField(blank=True)
-    stars = models.IntegerField(blank=True, null=True)
+    def average_rating(self):
+        return self.userreview_set.aggregate(models.Avg('rating'))['rating__avg']
 
     def __str__(self):
         return self.title
-
-    def get_reviews(self):
-        return UserReview.objects.filter(book=self)
 
 
 class Author(models.Model):
@@ -41,7 +38,7 @@ class UserShelf(models.Model):
     to_read_books = models.ManyToManyField('Book', related_name='to_read_books', blank=True)
 
     def __str__(self):
-        return f"{self.user.username}'s Shelf"
+        return f"{self.user.username}'s Bookshelf"
 
 
 class ReadBook(models.Model):
@@ -57,7 +54,7 @@ class UserReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     review = models.TextField(blank=True)
-    stars = models.IntegerField(blank=True, null=True)
+    rating = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username}'s review for {self.book.title}"
