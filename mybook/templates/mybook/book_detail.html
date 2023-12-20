@@ -13,8 +13,8 @@
 
 <body>
     <h1>{{ book_detail.title }}</h1>
-    <p>Author: {{  book_detail.author }}</p>
-    <p>ISBN: {{  book_detail.isbn }}</p>
+    <p>Author: {{ book_detail.author }}</p>
+    <p>ISBN: {{ book_detail.isbn }}</p>
 
     <h2>Genres:</h2>
     <ul>
@@ -22,7 +22,20 @@
             <li>{{ genre.name }}</li>
         {% endfor %}
     </ul>
-    
+
+    <h2>Rating:</h2>
+    {% if book_detail.average_rating %}
+        <p>{{ book_detail.average_rating }}</p>
+    {% else %}
+        <p>No ratings yet.</p>
+    {% endif %}
+
+    <h2>Reviews:</h2>
+    {% if book_detail.review %}
+        <p>{{ book_detail.review }}</p>
+    {% else %}
+        <p>No reviews yet.</p>
+    {% endif %}
     
     
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddToShelf">
@@ -45,17 +58,52 @@
                         </label>
                         
                         <label>
-                            <input type="radio" name="action" value="add_to_to_read"> Add to "To Read"
+                            <input type="radio" name="action" value="add_to_to_read" id="add_to_to_read"> Add to "To read"
                         </label>
+                        
+                        <div id="additional-fields" class="mt-3">
+                            <div class="mb-3">
+                                <label for="read_date" class="form-label">Read Date:</label>
+                                <input type="date" name="read_date" id="read_date" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Rating (1-10):</label>
+                                <input type="number" name="rating" id="rating" class="form-control" min="1" max="10">
+                            </div>
+                            <div class="mb-3">
+                                <label for="review" class="form-label">Review:</label>
+                                <textarea name="review" id="review" class="form-control"></textarea>
+                            </div>
+                        </div>
                         <div class="modal-footer">
                             <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                     </form>
+                </div>
             </div>
           </div>
         </div>
       </div>
 
+    {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#additional-fields').hide();
+  
+            $('input[name="action"]').change(function () {
+                var selectedAction = $('input[name="action"]:checked').val();
+  
+                if (selectedAction === 'add_to_read') {
+                    $('#additional-fields').show();
+                } else {
+                    $('#additional-fields').hide();
+                }
+            });
+        });
+    </script>
+    {% endblock %}
 </body>
 
 {% endblock content%}
+
