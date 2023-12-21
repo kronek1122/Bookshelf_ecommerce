@@ -16,7 +16,7 @@ class Book(models.Model):
     author = models.ForeignKey('Author',on_delete=models.SET_NULL,null=True)
     isbn = models.CharField('ISBN',max_length=13,unique=True)
     genre = models.ManyToManyField(Genre)
-    opinions = models.ManyToManyField('UserOpinion', related_name='book_opinion')
+    opinions = models.ManyToManyField('ReadBook', related_name='book_opinion')
 
 
     def __str__(self):
@@ -44,16 +44,8 @@ class ReadBook(models.Model):
     shelf = models.ForeignKey(UserShelf, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     read_date = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.shelf.user.username} read {self.book.title} on {self.read_date}"
-
-
-class UserOpinion(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     review = models.TextField(blank=True)
     rating = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username}'s review for {self.book.title}"
+        return f"{self.shelf.user.username} read {self.book.title} on {self.read_date}"
