@@ -11,12 +11,11 @@ class Genre(models.Model):
 
 
 class Book(models.Model):
-
-    title = models.CharField()
-    author = models.ForeignKey('Author',on_delete=models.SET_NULL,null=True)
-    isbn = models.CharField('ISBN',max_length=13,unique=True)
+    title = models.CharField(max_length=255)
+    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
+    isbn = models.CharField('ISBN', max_length=13, unique=True)
     genre = models.ManyToManyField(Genre)
-    opinions = models.ManyToManyField('ReadBook', related_name='book_opinion')
+    opinions = models.ManyToManyField('ReadBook', related_name='books_opinion')
 
 
     def __str__(self):
