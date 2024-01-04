@@ -24,15 +24,27 @@
     </ul>
 
     <h2>Rating:</h2>
-    {% if book_detail.average_rating %}
-        <p>{{ book_detail.average_rating }}</p>
+    {% if opinions %}
+        {% for opinion in opinions %}
+            {% if opinion.rating %}
+                <p>{{ opinion.rating }}</p>
+            {% else %}
+                <p>No ratings yet.</p>
+            {% endif %}
+        {% endfor %}
     {% else %}
         <p>No ratings yet.</p>
     {% endif %}
 
     <h2>Reviews:</h2>
-    {% if book_detail.review %}
-        <p>{{ book_detail.review }}</p>
+    {% if opinions %}
+        {% for opinion in opinions %}
+            {% if opinion.review %}
+                <p>{{ opinion.review }}</p>
+            {% else %}
+                <p>No reviews yet.</p>
+            {% endif %}
+        {% endfor %}
     {% else %}
         <p>No reviews yet.</p>
     {% endif %}

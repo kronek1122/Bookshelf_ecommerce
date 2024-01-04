@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
@@ -7,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView, DetailView, ListView
 
-from .models import Book, UserShelf, User
+from .models import Book, UserShelf, ReadBook
 
 
 def home(request):
@@ -78,6 +79,8 @@ class BookDetail(DetailView):
         context = super().get_context_data(**kwargs)
         book = context['object']
         context['genres'] = book.genre.all()
+        context['opinions'] = book.opinions.all()
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -98,7 +101,34 @@ class BookDetail(DetailView):
 
         if status == 'read':
             user_shelf.read_books.add(book)
-            messages.success(self.request, f'Added "{book.title}" to your {shelf_name} books.')
+
+            read_book, created = ReadBook.objects.get_or_create(
+                shelf=user_shelf,
+                book=book,
+                defaults={'read_date': timezone.now().date(), 'review': '', 'rating': None}
+            )
+
+            review = self.request.POST.get('review')
+            rating = self.request.POST.get('rating')
+            read_date = self.request.POST.get('read_date')
+
+
+            if review:
+                read_book.review = review
+
+            if rating:
+                read_book.rating = int(rating)
+
+            if read_date:
+                read_book.read_date = read_date
+
+            read_book.save()
+
+            if not created:
+                messages.warning(self.request, f'You have already marked "{book.title}" as read.')
+            else:
+                messages.success(self.request, f'Added "{book.title}" to your {shelf_name} books.')
+
         elif status == 'to_read':
             user_shelf.to_read_books.add(book)
             messages.success(self.request, f'Added "{book.title}" to your {shelf_name} books.')
