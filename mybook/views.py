@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView, DetailView, ListView
 
-from .models import Book, UserShelf, ReadBook
+from .models import Book, UserShelf, BookOpinion
 
 
 def home(request):
@@ -53,7 +53,6 @@ def delete_user(request):
     return render(request, 'mybook/delete_user.html')
 
 
-
 @login_required
 def user_settings(request):
     return render(request, 'mybook/setting_page.html')
@@ -79,8 +78,7 @@ class BookDetail(DetailView):
         context = super().get_context_data(**kwargs)
         book = context['object']
         context['genres'] = book.genre.all()
-        context['opinions'] = book.opinions.all()
-
+        context['opinions'] = book.book_opinion.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -102,9 +100,9 @@ class BookDetail(DetailView):
         if status == 'read':
             user_shelf.read_books.add(book)
 
-            read_book, created = ReadBook.objects.get_or_create(
-                shelf=user_shelf,
+            read_book, created = BookOpinion.objects.get_or_create(
                 book=book,
+                shelf=user_shelf,
                 defaults={'read_date': timezone.now().date(), 'review': '', 'rating': None}
             )
 
