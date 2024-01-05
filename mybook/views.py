@@ -77,7 +77,9 @@ class BookDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        book = context['object']
+        book = Book.objects.get(pk=self.kwargs['pk'])
+        book_opinions = BookOpinion.objects.filter(book_id=book.id)
+        book.book_opinion.set(book_opinions)
         context['genres'] = book.genre.all()
         context['opinions'] = book.book_opinion.all()
 
@@ -106,7 +108,7 @@ class BookDetail(DetailView):
             user_shelf.read_books.add(book)
 
             read_book, created = BookOpinion.objects.get_or_create(
-                book=book,
+                book_id=book,
                 shelf=user_shelf,
                 defaults={'read_date': timezone.now().date(), 'review': '', 'rating': None}
             )
