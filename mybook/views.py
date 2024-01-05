@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import CreateView, DetailView, ListView
+from statistics import mean
 
 from .models import Book, UserShelf, BookOpinion
 
@@ -79,6 +80,10 @@ class BookDetail(DetailView):
         book = context['object']
         context['genres'] = book.genre.all()
         context['opinions'] = book.book_opinion.all()
+
+        ratings = [opinion.rating for opinion in context['opinions'] if opinion.rating is not None]
+        context['average_rating'] = mean(ratings) if ratings else None
+
         return context
 
     def post(self, request, *args, **kwargs):
