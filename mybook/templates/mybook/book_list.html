@@ -3,14 +3,15 @@
 
 {% block content %}
 
-<h1>Book list</h1>
-<ul>
-    {% for book in book_list %}
+<div class="container mt-3">
+    <h1>Book list</h1>
+    <ul>
+        {% for book in book_list %}
 
-    <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
-    
-    {% endfor %}
-</ul>
-
+        <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
+        
+        {% endfor %}
+    </ul>
+</div>
 
 {% endblock content%}

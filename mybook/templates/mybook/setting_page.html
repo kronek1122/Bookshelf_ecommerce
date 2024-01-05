@@ -3,6 +3,7 @@
 {% block content %}
 
 <body>
+  <div class="container mt-3">
     <h1>Welcome, {{user.username}}!</h1>
     <div class="list-group">
         <a href="/mybook/change_password/" class="list-group-item list-group-item-action">Change password</a>
@@ -12,6 +13,7 @@
         <a href="/mybook/delete_user/" class="list-group-item list-group-item-action">Delete account</a>
 
       </div>
+    </div>
 </body>
 
 {% endblock content%}
