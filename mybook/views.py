@@ -68,7 +68,7 @@ class SignUpView(CreateView):
 class BookCreate(LoginRequiredMixin,CreateView):
     model = Book
     success_url = reverse_lazy('mybook:create_book')
-    fields ='__all__'
+    fields = ['title', 'author', 'isbn', 'genre']
 
 
 class BookDetail(DetailView):
@@ -80,6 +80,7 @@ class BookDetail(DetailView):
         book = Book.objects.get(pk=self.kwargs['pk'])
         book_opinions = BookOpinion.objects.filter(book_id=book.id)
         book.book_opinion.set(book_opinions)
+
         context['genres'] = book.genre.all()
         context['opinions'] = book.book_opinion.all()
 
