@@ -5,8 +5,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic.edit import FormView
+from .forms import UserDataChangeForm
+
 from statistics import mean
 
 from .models import Book, UserShelf, BookOpinion
@@ -147,3 +150,17 @@ class BookList(ListView):
 
 class UserPasswordChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
+
+
+class UserDataChangeView(LoginRequiredMixin, PasswordChangeView):
+    form_class = UserDataChangeForm
+    template_name = 'registration/user_data_change_form.html'
+    success_url = reverse_lazy('mybook:change_user_data_done')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+class UserDataChangeDoneView(PasswordChangeDoneView):
+    template_name = 'registration/user_data_change_done.html'
