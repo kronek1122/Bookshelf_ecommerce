@@ -3,16 +3,16 @@
 
 <body>
     <div class="container mt-3">
-        <h1>Welcome, {{user.username}}!</h1>
+        <h2>Welcome, {{user.username}}!</h2>
 
-        <h2>Read Books:</h2>
+        <h4>Read Books:</h4>
         <ul>
             {% for book in read_books %}
             <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
             {% endfor %}
         </ul>
 
-        <h2>To Read Books:</h2>
+        <h4>To Read Books:</h4>
         <ul>
             {% for book in to_read_books %}
             <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
