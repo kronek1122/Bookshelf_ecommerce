@@ -15,5 +15,6 @@ urlpatterns = [
     path('delete_user/', views.delete_user, name='delete_user' ),
     path('change_user_data/', views.UserDataChangeView.as_view(), name = 'change_user_data'),
     path('change_user_data/done/', views.UserDataChangeDoneView.as_view(), name = 'change_user_data_done'),
-
+    path('change_username/', views.UsernameChangeView.as_view(), name = 'change_username'),
+    path('change_user_name/done/', views.UsernameChangeDoneView.as_view(), name = 'change_username_done'),
 ]

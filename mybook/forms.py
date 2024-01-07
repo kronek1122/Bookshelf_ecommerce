@@ -6,9 +6,9 @@ class AddToShelfForm(forms.Form):
 
 
 class UserDataChangeForm(forms.ModelForm):
-    email = forms.EmailField(required=False)
-    first_name = forms.CharField(max_length=30, required=False)
-    last_name = forms.CharField(max_length=30, required=False)
+    email = forms.EmailField(required=False, label='New email')
+    first_name = forms.CharField(max_length=30, required=False, label ='New first name')
+    last_name = forms.CharField(max_length=30, required=False, label='New last name')
 
     class Meta:
         model = User
@@ -19,9 +19,6 @@ class UserDataChangeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if user:
-            self.fields['email'].initial = user.email
-            self.fields['first_name'].initial = user.first_name
-            self.fields['last_name'].initial = user.last_name
             self.user = user
 
     def clean_email(self):
@@ -48,3 +45,33 @@ class UserDataChangeForm(forms.ModelForm):
 
         return self.user
 
+class UsernameChangeForm(forms.ModelForm):
+    username = forms.CharField(max_length=30, label='New username')
+
+    class Meta:
+        model = User
+        fields = [ 'username']
+    
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user:
+            self.user = user
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        existing_user = User.objects.filter(username=username).exclude(pk=self.user.pk).first()
+        if existing_user:
+            raise forms.ValidationError('This username address is already in use.')
+
+        return username
+
+    def save(self, commit=True):
+        if self.user:
+            self.user.username = self.cleaned_data['username']
+
+            if commit:
+                self.user.save()
+
+        return self.user

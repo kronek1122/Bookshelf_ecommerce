@@ -7,8 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.views.generic import CreateView, DetailView, ListView
-from django.views.generic.edit import FormView
-from .forms import UserDataChangeForm
+from .forms import UserDataChangeForm, UsernameChangeForm
 
 from statistics import mean
 
@@ -162,5 +161,20 @@ class UserDataChangeView(LoginRequiredMixin, PasswordChangeView):
         kwargs['user'] = self.request.user
         return kwargs
 
+
 class UserDataChangeDoneView(PasswordChangeDoneView):
     template_name = 'registration/user_data_change_done.html'
+
+
+class UsernameChangeView(LoginRequiredMixin, PasswordChangeView):
+    form_class = UsernameChangeForm
+    template_name = 'registration/username_change_form.html'
+    success_url = reverse_lazy('mybook:change_username_done')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+class UsernameChangeDoneView(PasswordChangeDoneView):
+    template_name = 'registration/username_change_done.html'
