@@ -63,7 +63,7 @@ class UsernameChangeForm(forms.ModelForm):
         username = self.cleaned_data.get('username')
         existing_user = User.objects.filter(username=username).exclude(pk=self.user.pk).first()
         if existing_user:
-            raise forms.ValidationError('This username address is already in use.')
+            raise forms.ValidationError('This username is already in use.')
 
         return username
 
