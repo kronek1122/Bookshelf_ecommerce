@@ -22,6 +22,7 @@ def home(request):
 def user_view(request):
     try:
         user_shelf = UserShelf.objects.get(user=request.user)
+        user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
 
         read_books = user_shelf.read_books.all()
         to_read_books = user_shelf.to_read_books.all()
@@ -29,13 +30,13 @@ def user_view(request):
         context = {
             'read_books': read_books,
             'to_read_books': to_read_books,
+            'user_opinions' : user_opinions,
         }
     except:
         context = {
             'read_books': '',
             'to_read_books': '',
         }
-
     return render(request, 'mybook/profile.html', context)
 
 
@@ -80,11 +81,9 @@ class BookDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book = Book.objects.get(pk=self.kwargs['pk'])
-        book_opinions = BookOpinion.objects.filter(book_id=book.id)
-        book.book_opinion.set(book_opinions)
 
         context['genres'] = book.genre.all()
-        context['opinions'] = book.book_opinion.all()
+        context['opinions'] = book.get_opinions()
 
         ratings = [opinion.rating for opinion in context['opinions'] if opinion.rating is not None]
         context['average_rating'] = mean(ratings) if ratings else None
@@ -111,7 +110,7 @@ class BookDetail(DetailView):
             user_shelf.read_books.add(book)
 
             read_book, created = BookOpinion.objects.get_or_create(
-                book_id=book,
+                book=book,
                 shelf=user_shelf,
                 defaults={'read_date': timezone.now().date(), 'review': '', 'rating': None}
             )
