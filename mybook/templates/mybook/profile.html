@@ -3,21 +3,48 @@
 
 <body>
     <div class="container mt-3">
-        <h2>Welcome, {{user.username}}!</h2>
+        <h2>Welcome, {{ user.username }}!</h2>
 
-        <h4>Read Books:</h4>
-        <ul>
-            {% for book in read_books %}
-            <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
-            {% endfor %}
-        </ul>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Read Books:</h4>
+                {% if read_books %}
+                    <ul class="list-group">
+                        {% for book in read_books %}
+                            <li class="list-group-item">
+                                <a href="/mybook/book/{{ book.id }}">{{ book.title }} written by {{ book.author }}</a>
+                                {% for opinion in user_opinions %}
+                                    {% if opinion.book == book %}
+                                        <p class="mt-2">
+                                            <strong>Readed:</strong> {{ opinion.read_date }} <br>
+                                            <strong>Your rating:</strong> {{ opinion.rating }} <br>
+                                            <strong>Your review:</strong> {{ opinion.review }}
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No read books yet.</p>
+                {% endif %}
+            </div>
 
-        <h4>To Read Books:</h4>
-        <ul>
-            {% for book in to_read_books %}
-            <li><a href="/mybook/book/{{book.id}}">{{book.title}} written by {{book.author}}</a></li>
-            {% endfor %}
-        </ul>
+            <div class="col-md-6">
+                <h4>To Read Books:</h4>
+                {% if to_read_books %}
+                    <ul class="list-group">
+                        {% for book in to_read_books %}
+                            <li class="list-group-item">
+                                <a href="/mybook/book/{{ book.id }}">{{ book.title }} written by {{ book.author }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No books in your to-read list yet.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </body>
 
