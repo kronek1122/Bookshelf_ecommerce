@@ -10,6 +10,7 @@ from django.views.generic import CreateView, DetailView, ListView
 from .forms import UserDataChangeForm, UsernameChangeForm
 
 from statistics import mean
+from datetime import datetime
 
 from .models import Book, UserShelf, BookOpinion
 
@@ -26,17 +27,22 @@ def user_view(request):
 
         read_books = user_shelf.read_books.all()
         to_read_books = user_shelf.to_read_books.all()
+        read_books_this_month = user_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
+        read_books_this_year = user_opinions.filter(read_date__year=datetime.now().year)
 
         context = {
             'read_books': read_books,
             'to_read_books': to_read_books,
             'user_opinions' : user_opinions,
+            'read_books_this_month' : read_books_this_month,
+            'read_books_this_year' : read_books_this_year,
         }
-    except:
+    except Exception as e:
         context = {
             'read_books': '',
             'to_read_books': '',
         }
+        print(e)
     return render(request, 'mybook/profile.html', context)
 
 
