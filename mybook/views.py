@@ -145,12 +145,28 @@ class BookDetail(DetailView):
         elif status == 'to_read':
             user_shelf.to_read_books.add(book)
             messages.success(self.request, f'Added "{book.title}" to your {shelf_name} books.')
-
+    
 
 class BookList(ListView):
     model=Book
     context_object_name = 'book_list'
+    paginate_by = 10
 
+    def get_queryset(self):
+        queryset = Book.objects.all()
+
+        sort_by = self.request.GET.get('sort_by', 'title')
+        filter_field = self.request.GET.get('filter_field')
+        filter_value = self.request.GET.get('filter_value')
+
+        if sort_by in [field.name for field in Book._meta.get_fields()]:
+            queryset = queryset.order_by(sort_by)
+
+        if filter_field and filter_value:
+            filter_args = {f"{filter_field}__icontains": filter_value}
+            queryset = queryset.filter(**filter_args)
+
+        return queryset
 
 class UserPasswordChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
