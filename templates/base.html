@@ -21,8 +21,8 @@
               <li><a href="/admin" class="nav-link px-2 text-white">Admin Panel</a></li>
             </ul>
     
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-              <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
+            <form action="{% url 'mybook:search_result' %}" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+              <input type="search" name="query" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
             </form>
 
             {% if user.is_authenticated %}

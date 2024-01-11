@@ -199,3 +199,14 @@ class UsernameChangeView(LoginRequiredMixin, PasswordChangeView):
 
 class UsernameChangeDoneView(PasswordChangeDoneView):
     template_name = 'registration/username_change_done.html'
+
+
+def search_bar(request):
+    query = request.GET.get('query')
+    book_result = Book.objects.filter(title__icontains=query)
+    author_result = Book.objects.filter(author__last_name__icontains=query)
+    genre_result = Book.objects.filter(genre__name__icontains=query)
+    print(genre_result)
+
+    result = list(set(book_result) | set(author_result) | set(genre_result))
+    return render(request, 'mybook/search_result.html', {'results':result, 'query':query})
