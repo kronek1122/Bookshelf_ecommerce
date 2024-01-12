@@ -3,10 +3,10 @@
 
 <body>
     <div class="container mt-3">
-        <h2>Welcome, {{ user.username }}!</h2>
+        <h2 class="mb-3">Welcome, {{ user.username }}!</h2>
         <div class="row">
             <div class="col-md-3">
-                <h4>Statistics:</h4>
+                <h4 class="mt-4 mb-3">Statistics:</h4>
                 <ul class="list-group">
                     <li class="list-group-item">Total number of readed Books: {{ read_books|length }}</li>
                     <li class="list-group-item">Number of Books Read This Month: {{ read_books_this_month|length }}</li>
@@ -19,7 +19,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <h4>Read Books:</h4>
+                <h4 class="mt-4 mb-3">Read Books:</h4>
                 {% if read_books %}
                     <ul class="list-group">
                         {% for book in read_books %}
@@ -43,7 +43,7 @@
             </div>
 
             <div class="col-md-6">
-                <h4>To Read Books:</h4>
+                <h4 class="mt-4 mb-3">To Read Books:</h4>
                 {% if to_read_books %}
                     <ul class="list-group">
                         {% for book in to_read_books %}
