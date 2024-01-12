@@ -12,5 +12,44 @@
     {% endif %}
 
     <h1>Witaj na stronie głównej</h1>
+    <div class="row">
+        <h4>Main users statistics:</h4>
+        <div class="col-md-3">
+            <ul class="list-group">
+                <li class="list-group-item">Total number of readed Books: {{ book_opinions|length }}</li>
+                <li class="list-group-item">Number of Books Read This Month: {{ read_books_this_month|length }}</li>
+                <li class="list-group-item">Number of Books Read This Year: {{ read_books_this_year|length }}</li>
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Most read book:
+                    {% if most_read %}
+                        <a href="/mybook/book/{{ most_read.id }}">
+                            {{ most_read.title }} written by {{ most_read.author.first_name }} {{ most_read.author.last_name }}
+                        </a>
+                    {% else %}
+                        No books available
+                    {% endif %}
+                </li>
+                
+                <li class="list-group-item">
+                    Best rated book:
+                    {% if best_rating %}
+                        <a href="/mybook/book/{{ best_rating.id }}">
+                            {{ best_rating.title }} written by {{ best_rating.author.first_name }} {{ best_rating.author.last_name }}
+                        </a>
+                        with rating: {{ best_rating.avg_rating|default:"No ratings yet" }}
+                    {% else %}
+                        No books available
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
 </div>
 {% endblock content%}

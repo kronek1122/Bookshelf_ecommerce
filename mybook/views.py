@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.views.generic import CreateView, DetailView, ListView
+from django.db.models import Count, Avg, Q
 from .forms import UserDataChangeForm, UsernameChangeForm
 
 from statistics import mean
@@ -16,7 +17,23 @@ from .models import Book, UserShelf, BookOpinion
 
 
 def home(request):
-    return render(request, 'mybook/home.html')
+    books = Book.objects.all()
+    book_opinions = BookOpinion.objects.all()
+    
+    read_books_this_month = book_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
+    read_books_this_year = book_opinions.filter(read_date__year=datetime.now().year)
+    most_read = Book.objects.annotate(total_read=Count('bookopinion__read_date')).order_by('-total_read').first()
+    best_rating = Book.objects.annotate(avg_rating=Avg('bookopinion__rating')).filter(~Q(avg_rating=None)).order_by('-avg_rating').first()
+
+    contex = {
+        'books': books,
+        'book_opinions' : book_opinions,
+        'read_books_this_month' : read_books_this_month,
+        'read_books_this_year' : read_books_this_year,
+        'most_read' : most_read,
+        'best_rating' : best_rating,
+    }
+    return render(request, 'mybook/home.html', contex)
 
 
 @login_required
