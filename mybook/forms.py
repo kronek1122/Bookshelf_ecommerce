@@ -80,6 +80,6 @@ class MessagesForm(forms.ModelForm):
         model = Messages
         fields = [
             'sender',
-            'reciver',
+            'receiver',
             'message'
         ]

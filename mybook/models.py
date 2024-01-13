@@ -53,7 +53,7 @@ class BookOpinion(models.Model):
 
 class Messages(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
-    reciver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciver')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciver')
     message = models.TextField()
     unread = models.BooleanField(default=True)
     time_stamp = models.TimeField(auto_now_add=True)
