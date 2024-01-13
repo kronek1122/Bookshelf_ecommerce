@@ -1,8 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-
-class AddToShelfForm(forms.Form):
-    pass
+from .models import Messages
 
 
 class UserDataChangeForm(forms.ModelForm):
@@ -75,3 +73,13 @@ class UsernameChangeForm(forms.ModelForm):
                 self.user.save()
 
         return self.user
+
+
+class MessagesForm(forms.ModelForm):
+    class Meta:
+        model = Messages
+        fields = [
+            'sender',
+            'reciver',
+            'message'
+        ]
