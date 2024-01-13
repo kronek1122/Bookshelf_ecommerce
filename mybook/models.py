@@ -44,9 +44,16 @@ class BookOpinion(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     shelf = models.ForeignKey(UserShelf, on_delete=models.CASCADE)
     read_date = models.DateField(null=True, blank=True)
-    review = models.TextField(blank=True)
+    review = models.TextField(blank=True, null=True)
     rating = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.shelf.user.username} read {self.book.title} on {self.read_date}"
 
+
+class Messages(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    reciver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciver')
+    message = models.TextField()
+    unread = models.BooleanField(default=True)
+    time_stamp = models.TimeField(auto_now_add=True)
