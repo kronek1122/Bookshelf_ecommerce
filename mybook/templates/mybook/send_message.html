@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="{% url 'mybook:send_message' %}" class='container-sm' method='post' >
+    {% csrf_token %}
+        <h3 class="h3 mb-3 fw-normal">Send message </h3>              
+        <div class="mb-3">
+
+            {{form.as_p}}
+            <button class="btn btn-primary" type="submit" value="create">Send</button>
+
+        </div>
+</form>
+
+{% endblock content%}
