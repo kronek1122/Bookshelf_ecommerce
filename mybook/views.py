@@ -6,14 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, View
 from django.db.models import Count, Avg, Q
-from .forms import UserDataChangeForm, UsernameChangeForm
 
 from statistics import mean
 from datetime import datetime
 
-from .models import Book, UserShelf, BookOpinion
+from .forms import UserDataChangeForm, UsernameChangeForm, MessagesForm
+from .models import Book, UserShelf, BookOpinion, Messages
 
 
 def home(request):
@@ -227,3 +227,13 @@ def search_bar(request):
 
     result = list(set(book_result) | set(author_result) | set(genre_result))
     return render(request, 'mybook/search_result.html', {'results':result, 'query':query})
+
+
+class SendMessagesView(CreateView):
+    form_class = MessagesForm
+    template_name = 'mybook/send_message.html'
+    success_url = reverse_lazy('mybook:send_message')
+
+    def form_valid(self, form):
+        form.instance.sender_id = self.request.user.id
+        return super().form_valid(form)
