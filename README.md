@@ -18,6 +18,7 @@ Bookshelf is a Django-based web application that allows users to create an accou
 
 - Python 3.10.12
 - Django 4.2.7
+- django-postman 4.3.2   
 - psycopg2 2.9.9
 - python-dotenv 1.0.0
 
