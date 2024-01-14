@@ -23,5 +23,6 @@ urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('mybook/', include('mybook.urls')),
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('messages/', include('postman.urls', namespace='postman')),
 ]

@@ -38,6 +38,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mybook.apps.MybookConfig',
+    'postman',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,3 +134,26 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
+
+
+# Django-postman Configuration
+
+POSTMAN_I18N_URLS = False
+POSTMAN_DISALLOW_ANONYMOUS = True
+POSTMAN_DISALLOW_MULTIRECIPIENTS = True
+POSTMAN_DISALLOW_COPIES_ON_REPLY = True
+POSTMAN_DISABLE_USER_EMAILING = True  # default is False
+POSTMAN_AUTO_MODERATE_AS = True
+# POSTMAN_FROM_EMAIL = 'from@host.tld'  # default is DEFAULT_FROM_EMAIL
+# POSTMAN_PARAMS_EMAIL = get_params_email  # default is None
+# POSTMAN_SHOW_USER_AS = 'get_full_name'  # default is None
+# POSTMAN_NAME_USER_AS = 'last_name'  # default is None
+# POSTMAN_QUICKREPLY_QUOTE_BODY = True  # default is False
+# POSTMAN_NOTIFIER_APP = None  # default is 'notification'
+# POSTMAN_MAILER_APP = None  # default is 'mailer'
+# POSTMAN_AUTOCOMPLETER_APP = {
+    # 'name': '',  # default is 'ajax_select'
+    # 'field': '',  # default is 'AutoCompleteField'
+    # 'arg_name': '',  # default is 'channel'
+    # 'arg_default': 'postman_friends',  # no default, mandatory to enable the feature
+# }  # default is {}
