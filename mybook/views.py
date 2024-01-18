@@ -229,11 +229,6 @@ def search_bar(request):
     return render(request, 'mybook/search_result.html', {'results':result, 'query':query})
 
 
-class SendMessagesView(CreateView):
-    form_class = MessagesForm
-    template_name = 'mybook/send_message.html'
-    success_url = reverse_lazy('mybook:send_message')
-
-    def form_valid(self, form):
-        form.instance.sender_id = self.request.user.id
-        return super().form_valid(form)
+@login_required
+def user_inbox(request):
+    return render(request, 'postman/inbox.html')

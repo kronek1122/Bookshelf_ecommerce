@@ -1,4 +1,4 @@
-{% extends "postman/base.html" %}
+{% extends "templates/postman/base.html" %}
 {% load i18n postman_tags %}{% load pagination_tags %}{% comment %}
 WARNING: 'pagination_tags' is a name from the dj-pagination application.
 For convenience, the design of this template is done with the use of that application.
@@ -8,8 +8,8 @@ If the real implementation is to be used, just make sure that 'dj_pagination' is
 in the INSTALLED_APPS setting.
 {% endcomment %}
 {% block content %}
-<div id="postman">
-<h1>{% block pm_folder_title %}{% endblock %}</h1>
+<div class="container mt-3" id="postman">
+<h2>{% block pm_folder_title %}{% endblock %}</h2>
 {% autopaginate pm_messages %}
 {% if invalid_page %}
 <p>{% trans "Sorry, this page number is invalid." %}</p>
