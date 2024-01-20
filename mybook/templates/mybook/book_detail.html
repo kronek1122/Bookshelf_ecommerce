@@ -22,23 +22,38 @@
             </div>
         </div>
 
-        <h2>{{ book_detail.title }}</h2>
-        <p>Author: {{ book_detail.author }}</p>
-        <p>ISBN: {{ book_detail.isbn }}</p>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-3">
+                    {% if cover_url %}
+                        <img src="{{ cover_url }}" alt="Book cover" class="img-fluid">
+                    {% else %}
+                        <p>No cover available</p>
+                    {% endif %}
+                </div>
 
-        <h4>Genres:</h4>
-        <ul>
-            {% for genre in genres %}
-                <li>{{ genre.name }}</li>
-            {% endfor %}
-        </ul>
+                <div class="col-md-6">
+                    <h2>{{ book_detail.title }}</h2>
+                    <p>Author: {{ book_detail.author }}</p>
+                    <p>ISBN: {{ book_detail.isbn }}</p>
+    
+                    <h4>Genres:</h4>
+                    <ul>
+                        {% for genre in genres %}
+                            <li>{{ genre.name }}</li>
+                        {% endfor %}
+                    </ul>
 
-        <h4>Average rating:</h4>
-        {% if average_rating %}
-            <p>{{ average_rating }}/10</p>
-        {% else %}
-            <p>No ratings yet.</p>
-        {% endif %}
+                    <h4>Average rating:</h4>
+                    {% if average_rating %}
+                        <p>{{ average_rating }}/10</p>
+                    {% else %}
+                        <p>No ratings yet.</p>
+                    {% endif %}
+                </div>
+    
+            </div>
+
 
         <h4>Reviews:</h4>
         {% if opinions %}

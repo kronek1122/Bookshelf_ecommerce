@@ -14,6 +14,7 @@ from datetime import datetime
 
 from .forms import UserDataChangeForm, UsernameChangeForm
 from .models import Book, UserShelf, BookOpinion
+from .utils import get_book_cover_info
 
 
 def home(request):
@@ -113,6 +114,9 @@ class BookDetail(DetailView):
 
         ratings = [opinion.rating for opinion in context['opinions'] if opinion.rating is not None]
         context['average_rating'] = mean(ratings) if ratings else None
+
+        cover_info = get_book_cover_info(book.isbn)
+        context['cover_url'] = cover_info['large'] if cover_info else None
 
         return context
 
