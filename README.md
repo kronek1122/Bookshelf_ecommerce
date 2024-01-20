@@ -13,6 +13,8 @@ Bookshelf is a Django-based web application that allows users to create an accou
 - **Change Personal Data:** Users have the ability to update their personal information, including email, password, first name, last name, and username.
 - **User statistic:** On their own page, users can see statistics such as how many books they have read in total, monthly, and yearly, as well as how many books they have in their to-read list.
 - **Search bar, sort and filter:** Users can use the search bar to look for their favorite books, genres, or authors and add new books to their to-read shelf. Additionaly, everyone can sort and filter through the book list. 
+- **Inbox:** Users can send messages to each other, they have disposal to: archive, trash, sent, inbox folders.
+- **Book Covers:** Book covers are downloaded automatically using the Open Library Covers API
 
 ### Prerequisites
 
@@ -21,4 +23,5 @@ Bookshelf is a Django-based web application that allows users to create an accou
 - django-postman 4.3.2   
 - psycopg2 2.9.9
 - python-dotenv 1.0.0
+- requests 2.31.0
 
