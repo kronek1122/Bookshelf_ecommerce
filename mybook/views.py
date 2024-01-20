@@ -95,7 +95,7 @@ class SignUpView(CreateView):
 class BookCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Book
     success_url = reverse_lazy('mybook:create_book')
-    fields = ['title', 'author', 'isbn', 'genre']
+    fields = ['title', 'author', 'isbn', 'genre', 'description']
     
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_staff
