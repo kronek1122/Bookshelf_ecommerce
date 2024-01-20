@@ -4,16 +4,16 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
-from django.views.generic import CreateView, DetailView, ListView, View
+from django.views.generic import CreateView, DetailView, ListView
 from django.db.models import Count, Avg, Q
 
 from statistics import mean
 from datetime import datetime
 
-from .forms import UserDataChangeForm, UsernameChangeForm, MessagesForm
-from .models import Book, UserShelf, BookOpinion, Messages
+from .forms import UserDataChangeForm, UsernameChangeForm
+from .models import Book, UserShelf, BookOpinion
 
 
 def home(request):
@@ -91,10 +91,13 @@ class SignUpView(CreateView):
     template_name = 'mybook/signup.html'
 
 
-class BookCreate(LoginRequiredMixin,CreateView):
+class BookCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Book
     success_url = reverse_lazy('mybook:create_book')
     fields = ['title', 'author', 'isbn', 'genre']
+    
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_staff
 
 
 class BookDetail(DetailView):
