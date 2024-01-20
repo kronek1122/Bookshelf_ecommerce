@@ -32,7 +32,7 @@
                     {% endif %}
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-9">
                     <h2>{{ book_detail.title }}</h2>
                     <p>Author: {{ book_detail.author }}</p>
                     <p>ISBN: {{ book_detail.isbn }}</p>
@@ -43,6 +43,9 @@
                             <li>{{ genre.name }}</li>
                         {% endfor %}
                     </ul>
+
+                    <h4>Description:</h4>
+                    <p>{{ book_detail.description }}</p>
 
                     <h4>Average rating:</h4>
                     {% if average_rating %}

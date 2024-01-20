@@ -118,6 +118,8 @@ class BookDetail(DetailView):
         cover_info = get_book_cover_info(book.isbn)
         context['cover_url'] = cover_info['large'] if cover_info else None
 
+        context['description'] = book.description
+
         return context
 
     def post(self, request, *args, **kwargs):

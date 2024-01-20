@@ -15,7 +15,7 @@ class Book(models.Model):
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
     isbn = models.CharField('ISBN', max_length=13, unique=True)
     genre = models.ManyToManyField(Genre)
-
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.title
