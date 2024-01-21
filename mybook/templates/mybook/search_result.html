@@ -3,13 +3,28 @@
 {% block content %}
 
 <div class="container mt-3">
-    <h2>Search results for "{{ query }}"</h1>
+    <h2>Book search results for "{{ query }}":</h2>
         <ul>
-            {% for book in results %}
+        {% if results_books %}
+            {% for book in results_books %}
                 <li><a href="/mybook/book/{{ book.id }}">{{ book.title }} written by {{ book.author }}</a></li>
             {% endfor %}
+        {% else %}
+            <p>No matches found</p>
+        {% endif %}
         </ul>
-    </div>
+    <h2>Users search result for "{{ query }}":</h2>
+    <ul>
+        {% if results_users %}
+            {% for user in results_users %}
+                <li><a href="/mybook/user/{{ user.username }}">User: '{{ user.username }}'</a></li>
+            {% endfor %}
+        {% else %}
+            <p>No matches found</p>
+        {% endif %}
+
+    </ul>
+
 </div>
 
 {% endblock content%}
