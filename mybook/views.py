@@ -281,7 +281,6 @@ def search_bar(request):
     genre_result = Book.objects.filter(genre__name__icontains=query)
     
     results_books = list(set(book_result) | set(author_result) | set(genre_result))
-
     results_users = User.objects.filter(username__icontains=query)
 
     return render(request, 'mybook/search_result.html', {'results_books':results_books,'results_users':results_users, 'query':query})
