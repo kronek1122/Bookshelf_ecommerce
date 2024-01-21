@@ -24,6 +24,10 @@ def home(request):
     read_books_this_month = book_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
     read_books_this_year = book_opinions.filter(read_date__year=datetime.now().year)
     most_read = Book.objects.annotate(total_read=Count('bookopinion__read_date')).order_by('-total_read').first()
+    if most_read is not None and most_read.total_read > 0:
+        pass
+    else:
+        most_read = None
     best_rating = Book.objects.annotate(avg_rating=Avg('bookopinion__rating')).filter(~Q(avg_rating=None)).order_by('-avg_rating').first()
 
     contex = {
