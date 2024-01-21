@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.http import HttpResponseServerError, Http404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.models import User
 from django.views.generic import CreateView, DetailView, ListView
 from django.db.models import Count, Avg, Q
 
@@ -45,6 +47,7 @@ def home(request):
 def user_view(request):
     try:
         user_shelf = UserShelf.objects.get(user=request.user)
+
         user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
 
         read_books = user_shelf.read_books.all()
@@ -66,6 +69,46 @@ def user_view(request):
         }
         print(e)
     return render(request, 'mybook/profile.html', context)
+
+
+@login_required
+def another_user_view(request, username=None):
+    try:
+        if username:
+            user = User.objects.get(username=username)
+            user_shelf = UserShelf.objects.get(user=user)
+
+            user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
+
+            read_books = user_shelf.read_books.all()
+            to_read_books = user_shelf.to_read_books.all()
+            read_books_this_month = user_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
+            read_books_this_year = user_opinions.filter(read_date__year=datetime.now().year)
+
+            context = {
+                'read_books': read_books,
+                'to_read_books': to_read_books,
+                'user_opinions' : user_opinions,
+                'read_books_this_month' : read_books_this_month,
+                'read_books_this_year' : read_books_this_year,
+                'user_profile' : user,
+            }
+        else:
+            return HttpResponseServerError("Invalid username.")
+        
+    except User.DoesNotExist:
+        raise Http404("User does not exist.")
+
+    except UserShelf.DoesNotExist:
+        raise Http404("UserShelf not found for the specified user.")
+    
+    except Exception as e:
+        context = {
+            'read_books': '',
+            'to_read_books': '',
+        }
+        print(e)
+    return render(request, 'mybook/another_user_view.html', context)
 
 
 @login_required
