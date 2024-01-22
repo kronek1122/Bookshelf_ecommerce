@@ -98,9 +98,6 @@ def another_user_view(request, username=None):
         
     except User.DoesNotExist:
         raise Http404("User does not exist.")
-
-    except UserShelf.DoesNotExist:
-        raise Http404("UserShelf not found for the specified user.")
     
     except Exception as e:
         context = {
