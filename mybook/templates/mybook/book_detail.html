@@ -12,15 +12,19 @@
         {% endif %}
         
 <body>
-
     <div class="container mt-3">
         <div class="row justify-content-end">
             <div class="col-md-6 col-lg-4">
-                <button type="button" class="btn btn-primary w-90 mt-2" data-bs-toggle="modal" data-bs-target="#AddToShelf">
-                    Add to bookshelf
-                </button>
+                {% if user.is_authenticated %}
+                    <button type="button" class="btn btn-primary w-90 mt-2" data-bs-toggle="modal" data-bs-target="#AddToShelf">
+                        Add to bookshelf
+                    </button>
+                {% else %}
+                    <a href="/accounts/login" class=" px-2 text-blue">Login to add book to bookshelf</a>
+                {% endif %}
             </div>
         </div>
+
 
         <div class="container mt-3">
             <div class="row">
