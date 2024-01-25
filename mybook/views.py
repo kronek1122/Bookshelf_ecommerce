@@ -114,26 +114,26 @@ class AnotherUserView(View):
         username = User.objects.get(pk=username_id)
 
         if action == 'follow':
-            self.follow('follow', username=username)
+            self.manage_follow_status('follow', username=username)
         elif action == 'unfollow':
-            self.follow('unfollow',username=username)
+            self.manage_follow_status('unfollow',username=username)
         else:
             messages.warning(request, 'Invalid action.')
 
         return redirect('mybook:another_user_profile', username=self.kwargs['username'])
 
-    def follow(self, status, username):
-        main_user_follow_list, created = UserFollow.objects.get_or_create(user=self.request.user)
-        second_user_follow_list, created = UserFollow.objects.get_or_create(user=username)
+    def manage_follow_status(self, status, username):
+        current_user_follow_list, created = UserFollow.objects.get_or_create(user=self.request.user)
+        target_user_follow_list, created = UserFollow.objects.get_or_create(user=username)
 
         if status == 'follow':
-            main_user_follow_list.following.add(username)
-            second_user_follow_list.followers.add(self.request.user)
+            current_user_follow_list.following.add(username)
+            target_user_follow_list.followers.add(self.request.user)
             messages.success(self.request, f'Now, you follow {username}.')
 
         elif status == 'unfollow':
-            main_user_follow_list.following.remove(username)
-            second_user_follow_list.followers.remove(self.request.user)
+            current_user_follow_list.following.remove(username)
+            target_user_follow_list.followers.remove(self.request.user)
             messages.success(self.request, f'{username} unfollowed.')
 
 
