@@ -57,3 +57,9 @@ class Messages(models.Model):
     message = models.TextField()
     unread = models.BooleanField(default=True)
     time_stamp = models.TimeField(auto_now_add=True)
+
+
+class UserFollow(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    following = models.ManyToManyField(User, related_name='followers')
+    followers = models.ManyToManyField(User, related_name='following')
