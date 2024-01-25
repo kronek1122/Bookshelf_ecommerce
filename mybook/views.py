@@ -8,6 +8,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.models import User
+from django.views import View
 from django.views.generic import CreateView, DetailView, ListView
 from django.db.models import Count, Avg, Q
 
@@ -15,7 +16,7 @@ from statistics import mean
 from datetime import datetime
 
 from .forms import UserDataChangeForm, UsernameChangeForm
-from .models import Book, UserShelf, BookOpinion
+from .models import Book, UserShelf, BookOpinion, UserFollow
 from .utils import get_book_cover_info
 
 
@@ -67,45 +68,73 @@ def user_view(request):
             'read_books': '',
             'to_read_books': '',
         }
-        print(e)
     return render(request, 'mybook/profile.html', context)
 
 
-@login_required
-def another_user_view(request, username=None):
-    try:
-        if username:
-            user = User.objects.get(username=username)
-            user_shelf = UserShelf.objects.get(user=user)
+class AnotherUserView(View):
 
-            user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
+    def get(self, request, username=None):
+        try:
+            if username:
+                user = User.objects.get(username=username)
+                user_shelf = UserShelf.objects.get(user=user)
 
-            read_books = user_shelf.read_books.all()
-            to_read_books = user_shelf.to_read_books.all()
-            read_books_this_month = user_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
-            read_books_this_year = user_opinions.filter(read_date__year=datetime.now().year)
+                user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
 
+                read_books = user_shelf.read_books.all()
+                to_read_books = user_shelf.to_read_books.all()
+                read_books_this_month = user_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
+                read_books_this_year = user_opinions.filter(read_date__year=datetime.now().year)
+
+                context = {
+                    'read_books': read_books,
+                    'to_read_books': to_read_books,
+                    'user_opinions' : user_opinions,
+                    'read_books_this_month' : read_books_this_month,
+                    'read_books_this_year' : read_books_this_year,
+                    'user_profile' : user,
+                }
+            else:
+                return HttpResponseServerError("Invalid username.")
+            
+        except User.DoesNotExist:
+            raise Http404("User does not exist.")
+        
+        except Exception as e:
             context = {
-                'read_books': read_books,
-                'to_read_books': to_read_books,
-                'user_opinions' : user_opinions,
-                'read_books_this_month' : read_books_this_month,
-                'read_books_this_year' : read_books_this_year,
+                'read_books': '',
+                'to_read_books': '',
                 'user_profile' : user,
             }
-        else:
-            return HttpResponseServerError("Invalid username.")
-        
-    except User.DoesNotExist:
-        raise Http404("User does not exist.")
+        return render(request, 'mybook/another_user_view.html', context)
     
-    except Exception as e:
-        context = {
-            'read_books': '',
-            'to_read_books': '',
-        }
-        print(e)
-    return render(request, 'mybook/another_user_view.html', context)
+    def post(self, request, username=None):
+        action = request.POST.get('action')
+        username_id = request.POST.get('username')
+        username = User.objects.get(pk=username_id)
+
+        if action == 'follow':
+            self.follow('follow', username=username)
+        elif action == 'unfollow':
+            self.follow('unfollow',username=username)
+        else:
+            messages.warning(request, 'Invalid action.')
+
+        return redirect('mybook:another_user_profile', username=self.kwargs['username'])
+
+    def follow(self, status, username):
+        main_user_follow_list, created = UserFollow.objects.get_or_create(user=self.request.user)
+        second_user_follow_list, created = UserFollow.objects.get_or_create(user=username)
+
+        if status == 'follow':
+            main_user_follow_list.following.add(username)
+            second_user_follow_list.followers.add(self.request.user)
+            messages.success(self.request, f'Now, you follow {username}.')
+
+        elif status == 'unfollow':
+            main_user_follow_list.following.remove(username)
+            second_user_follow_list.followers.remove(self.request.user)
+            messages.success(self.request, f'{username} unfollowed.')
 
 
 @login_required
