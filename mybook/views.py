@@ -75,6 +75,18 @@ class AnotherUserView(View):
 
     def get(self, request, username=None):
         try:
+            is_following = False
+            current_user = UserFollow.objects.get(user=self.request.user)
+
+            for following_user in current_user.following.all():
+                if following_user.username == username:
+                    is_following = True
+                    break
+
+        except UserFollow.DoesNotExist:
+            is_following = False
+
+        try:
             if username:
                 user = User.objects.get(username=username)
                 user_shelf = UserShelf.objects.get(user=user)
@@ -83,8 +95,13 @@ class AnotherUserView(View):
 
                 read_books = user_shelf.read_books.all()
                 to_read_books = user_shelf.to_read_books.all()
-                read_books_this_month = user_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
-                read_books_this_year = user_opinions.filter(read_date__year=datetime.now().year)
+                read_books_this_month = user_opinions.filter(
+                    read_date__month=datetime.now().month, 
+                    read_date__year=datetime.now().year
+                    )
+                read_books_this_year = user_opinions.filter(
+                    read_date__year=datetime.now().year
+                    )
 
                 context = {
                     'read_books': read_books,
@@ -93,6 +110,7 @@ class AnotherUserView(View):
                     'read_books_this_month' : read_books_this_month,
                     'read_books_this_year' : read_books_this_year,
                     'user_profile' : user,
+                    'is_following': is_following,
                 }
             else:
                 return HttpResponseServerError("Invalid username.")
@@ -100,12 +118,14 @@ class AnotherUserView(View):
         except User.DoesNotExist:
             raise Http404("User does not exist.")
         
-        except Exception as e:
+        except UserShelf.DoesNotExist:
             context = {
                 'read_books': '',
                 'to_read_books': '',
                 'user_profile' : user,
+                'is_following': is_following,
             }
+
         return render(request, 'mybook/another_user_view.html', context)
     
     def post(self, request, username=None):
