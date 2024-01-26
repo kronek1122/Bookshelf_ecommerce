@@ -1,13 +1,48 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
 <body>
     <div class="container mt-3">
-        {% if user.id == user_profile.id %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+            <div class="row justify-content-end">
+                <div class="col-md-6 col-lg-4">
+                    {% if user.is_authenticated %}
+                        {% if is_following %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="unfollow">
+                                <input type="hidden" name="username" value="{{ user_profile.id }}">
+                                <button type="submit" class="btn btn-primary w-90 mt-2">
+                                    Unfollow
+                                </button>
+                            </form>
+                        {% else %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="follow">
+                                <input type="hidden" name="username" value="{{ user_profile.id }}">
+                                <button type="submit" class="btn btn-primary w-90 mt-2">
+                                    Follow
+                                </button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <a href="/accounts/login" class=" px-2 text-blue">Login to follow user.</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% if user.id == user_profile.id %}
             <h2 class="mb-3">Welcome, {{ user.username }}!</h2>
-        {% else %}
+            {% else %}
             <h2 class="mb-3">Welcome on '{{ user_profile.username }}' profile!</h2>
-        {% endif %}
+            {% endif %}
         <div class="row">
             <div class="col-md-3">
                 <h4 class="mt-4 mb-3">Statistics:</h4>
