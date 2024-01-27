@@ -19,4 +19,5 @@ urlpatterns = [
     path('change_username/', views.UsernameChangeView.as_view(), name = 'change_username'),
     path('change_user_name/done/', views.UsernameChangeDoneView.as_view(), name = 'change_username_done'),
     path('search_result/', views.search_bar, name='search_result'),
+    path('follow_list/', views.FollowList.as_view(), name='follow_list'),
 ]
