@@ -12,6 +12,9 @@
                     <li class="list-group-item">Number of Books Read This Month: {{ read_books_this_month|length }}</li>
                     <li class="list-group-item">Number of Books Read This Year: {{ read_books_this_year|length }}</li>
                     <li class="list-group-item">Number of Books To Read: {{ to_read_books|length }}</li>
+                    <li class="list-group-item">You are following <a href="{% url 'mybook:follow_list' %}">{{ followers_list|length }}</a> users</li>
+                    <li class="list-group-item">You have <a href="{% url 'mybook:follow_list' %}">{{ following_list|length }}</a> followers</li>
+
                 </ul>
             </div>
         </div>
