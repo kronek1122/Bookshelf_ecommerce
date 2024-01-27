@@ -51,15 +51,13 @@ class BookOpinion(models.Model):
         return f"{self.shelf.user.username} read {self.book.title} on {self.read_date}"
 
 
-class Messages(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciver')
-    message = models.TextField()
-    unread = models.BooleanField(default=True)
-    time_stamp = models.TimeField(auto_now_add=True)
-
-
 class UserFollow(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     following = models.ManyToManyField(User, related_name='followers')
     followers = models.ManyToManyField(User, related_name='following')
+
+
+class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
