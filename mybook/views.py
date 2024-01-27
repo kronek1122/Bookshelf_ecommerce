@@ -50,26 +50,36 @@ def home(request):
 def user_view(request):
     try:
         user_shelf = UserShelf.objects.get(user=request.user)
-
         user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
-
         read_books = user_shelf.read_books.all()
         to_read_books = user_shelf.to_read_books.all()
         read_books_this_month = user_opinions.filter(read_date__month=datetime.now().month, read_date__year=datetime.now().year)
         read_books_this_year = user_opinions.filter(read_date__year=datetime.now().year)
+    
+    except UserShelf.DoesNotExist:
+        user_shelf = None
+        read_books = to_read_books = read_books_this_month = read_books_this_year = []
 
-        context = {
-            'read_books': read_books,
-            'to_read_books': to_read_books,
-            'user_opinions' : user_opinions,
-            'read_books_this_month' : read_books_this_month,
-            'read_books_this_year' : read_books_this_year,
-        }
-    except Exception as e:
-        context = {
-            'read_books': '',
-            'to_read_books': '',
-        }
+    try:
+        user_follow_list = UserFollow.objects.get(user=request.user)
+        followers_list = user_follow_list.following.all()
+        following_list = user_follow_list.followers.all()
+    
+    except UserFollow.DoesNotExist:
+        user_follow_list = None
+        followers_list = following_list = []
+
+    context = {
+        'user_shelf': user_shelf,
+        'read_books': read_books,
+        'to_read_books': to_read_books,
+        'user_opinions': user_opinions,
+        'read_books_this_month': read_books_this_month,
+        'read_books_this_year': read_books_this_year,
+        'user_follow_list': user_follow_list,
+        'followers_list': followers_list,
+        'following_list': following_list,
+}
     return render(request, 'mybook/profile.html', context)
 
 
@@ -92,7 +102,6 @@ class AnotherUserView(View):
             if username:
                 user = User.objects.get(username=username)
                 user_shelf = UserShelf.objects.get(user=user)
-
                 user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
 
                 read_books = user_shelf.read_books.all()
@@ -116,7 +125,7 @@ class AnotherUserView(View):
                 }
             else:
                 return HttpResponseServerError("Invalid username.")
-            
+    
         except User.DoesNotExist:
             raise Http404("User does not exist.")
         
@@ -346,6 +355,12 @@ class FollowList(ListView):
 
 
     def get_queryset(self) -> QuerySet[Any]:
-        return UserFollow.objects.get(user=self.request.user)
+        try:
+            queryset = UserFollow.objects.get(user=self.request.user)
+        
+        except UserFollow.DoesNotExist:
+            queryset = None
+
+        return queryset
     
 
