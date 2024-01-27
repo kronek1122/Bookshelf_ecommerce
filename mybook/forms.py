@@ -73,17 +73,3 @@ class UsernameChangeForm(forms.ModelForm):
                 self.user.save()
 
         return self.user
-
-
-class MessagesForm(forms.ModelForm):
-
-    class Meta:
-        model = Messages
-        fields = [
-            'receiver',
-            'message'
-        ]
-    
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
