@@ -17,8 +17,8 @@ from django.db.models import Count, Avg, Q
 from statistics import mean
 from datetime import datetime
 
-from .forms import UserDataChangeForm, UsernameChangeForm
-from .models import Book, UserShelf, BookOpinion, UserFollow
+from .forms import UserDataChangeForm, UsernameChangeForm, PostForm
+from .models import Book, UserShelf, BookOpinion, UserFollow, Post
 from .utils import get_book_cover_info
 
 
@@ -348,7 +348,7 @@ def user_inbox(request):
     return render(request, 'postman/inbox.html')
 
 
-class FollowList(ListView):
+class FollowList(LoginRequiredMixin,ListView):
     model=UserFollow
     template_name = 'mybook/follow_list.html'
     context_object_name = 'user_list'
@@ -364,3 +364,14 @@ class FollowList(ListView):
         return queryset
     
 
+def board(request):
+    posts = Post.objects.all()
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.instance.user = request.user
+            form.save()
+            return redirect('mybook:board')
+    else:
+        form = PostForm()
+    return render(request, 'mybook/board.html', {'posts': posts, 'form': form})    
