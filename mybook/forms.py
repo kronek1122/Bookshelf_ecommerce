@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Messages
+from .models import Post
 
 
 class UserDataChangeForm(forms.ModelForm):
@@ -73,3 +73,9 @@ class UsernameChangeForm(forms.ModelForm):
                 self.user.save()
 
         return self.user
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['content']
