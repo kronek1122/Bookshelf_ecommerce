@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.http import HttpResponseServerError, Http404
+from django.http import HttpResponseServerError, Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
@@ -48,6 +48,7 @@ def home(request):
 
 @login_required
 def user_view(request):
+
     try:
         user_shelf = UserShelf.objects.get(user=request.user)
         user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
@@ -80,6 +81,28 @@ def user_view(request):
         'followers_list': followers_list,
         'following_list': following_list,
 }
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'remove_book':
+            book_id = request.POST.get('book_id')
+            try:
+                user_shelf = UserShelf.objects.get(user=request.user)
+                user_shelf.read_books.remove(book_id)
+                BookOpinion.objects.filter(shelf=user_shelf, book_id=book_id).delete()
+            except UserShelf.DoesNotExist:
+                pass
+        elif action == 'remove_to_read_book':
+            book_id = request.POST.get('book_id')
+            user_shelf.to_read_books.remove(book_id)
+        elif action == 'delete_opinion':
+            opinion_id = request.POST.get('opinion_id')
+            try:
+                user_shelf = UserShelf.objects.get(user=request.user)
+                BookOpinion.objects.filter(shelf=user_shelf, id=opinion_id).delete()
+            except UserShelf.DoesNotExist:
+                pass
+        return HttpResponseRedirect(request.path)
+
     return render(request, 'mybook/profile.html', context)
 
 
