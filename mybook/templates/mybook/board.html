@@ -4,23 +4,33 @@
 
 <div class="container mt-3">
     <h2>Public board</h2>
-    <h4>Exchange your thoughts with other users</h4>
+    <h4>Exchange your thoughts with other users:</h4>
     
     {% if user.is_authenticated %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group w-75">
+                <textarea class="form-control" name="content" rows="4" cols="48" placeholder="Enter text here"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    
     {% endif %}
 </div>
 
 {% for post in posts %}
 <div class="container mt-3">
-    <small>{{ post.user }}</small>
-    <p>{{ post.content }}</p>
-    <small>{{ post.created_at }}</small>
+    <div class="card text-dark bg-light border-secondary w-75">
+        <div class="card-header">
+            <h6 class="text-muted">{{ post.user }}</h6>
+        </div>
+        <div class="card-body py-1">
+            <p class="card-text">{{ post.content }}</p>
+            <p class="card-text"><small class="text-muted">{{ post.created_at }}</small></p>
+        </div>
+    </div>
 </div>
 {% endfor %}
+
 
 {% endblock content %}
