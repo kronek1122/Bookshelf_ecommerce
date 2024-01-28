@@ -365,7 +365,7 @@ class FollowList(LoginRequiredMixin,ListView):
     
 
 def board(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-created_at')
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
