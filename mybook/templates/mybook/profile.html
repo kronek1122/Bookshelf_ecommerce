@@ -28,12 +28,24 @@
                         {% for book in read_books %}
                             <li class="list-group-item">
                                 <a href="/mybook/book/{{ book.id }}">{{ book.title }} written by {{ book.author }}</a>
+                                <form action="{% url 'mybook:profile' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove_book">
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <button type="submit" class="btn btn-sm btn-light text-secondary">X</button>
+                                </form>
                                 {% for opinion in user_opinions %}
                                     {% if opinion.book == book %}
                                         <p class="mt-2">
                                             <strong>Readed:</strong> {{ opinion.read_date }} <br>
                                             <strong>Rating:</strong> {{ opinion.rating }} <br>
                                             <strong>Review:</strong> {{ opinion.review }}
+                                            <form action="{% url 'mybook:profile' %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="delete_opinion">
+                                                <input type="hidden" name="opinion_id" value="{{ opinion.id }}">
+                                                <button type="submit" class="btn btn-sm btn-light text-secondary">X</button>
+                                            </form>
                                         </p>
                                     {% endif %}
                                 {% endfor %}
@@ -52,6 +64,12 @@
                         {% for book in to_read_books %}
                             <li class="list-group-item">
                                 <a href="/mybook/book/{{ book.id }}">{{ book.title }} written by {{ book.author }}</a>
+                                <form action="{% url 'mybook:profile' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove_to_read_book">
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <button type="submit" class="btn btn-sm btn-light text-secondary">X</button>
+                                </form>
                             </li>
                         {% endfor %}
                     </ul>
