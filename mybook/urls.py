@@ -20,5 +20,6 @@ urlpatterns = [
     path('change_user_name/done/', views.UsernameChangeDoneView.as_view(), name = 'change_username_done'),
     path('search_result/', views.search_bar, name='search_result'),
     path('follow_list/', views.FollowList.as_view(), name='follow_list'),
-    path('board/', views.board, name='board')
+    path('board/', views.board, name='board'),
+    path('create_author/', views.AuthorCreate.as_view(), name='create_author'),
 ]
