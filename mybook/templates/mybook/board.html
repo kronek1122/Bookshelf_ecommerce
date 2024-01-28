@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-3">
+    <h2>Public board</h2>
+    <h4>Exchange your thoughts with other users</h4>
+    
+    {% if user.is_authenticated %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    {% endif %}
+</div>
+
+{% for post in posts %}
+<div class="container mt-3">
+    <small>{{ post.user }}</small>
+    <p>{{ post.content }}</p>
+    <small>{{ post.created_at }}</small>
+</div>
+{% endfor %}
+
+{% endblock content %}
