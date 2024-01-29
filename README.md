@@ -29,7 +29,8 @@ Bookshelf is a Django-based web application that allows users to create an accou
 
 ### The website can be viewed at:
 
-**kronek.pythonanywhere.com**
+[If you want to see the website in action, click](https://www.kronek.pythonanywhere.com).
+
 If you want to check what the staff can do:
 login: staff
 password: staffuser123
