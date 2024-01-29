@@ -22,7 +22,7 @@
 <div class="container mt-3">
     <div class="card text-dark bg-light border-secondary w-75">
         <div class="card-header">
-            <h6 class="text-muted">{{ post.user }}</h6>
+            <h6 class="text-muted"><a href="/mybook/user/{{ post.user }}"> {{ post.user }}</a></h6>
         </div>
         <div class="card-body py-1">
             <p class="card-text">{{ post.content }}</p>
