@@ -22,4 +22,6 @@ urlpatterns = [
     path('follow_list/', views.FollowList.as_view(), name='follow_list'),
     path('board/', views.board, name='board'),
     path('create_author/', views.AuthorCreate.as_view(), name='create_author'),
+    path('create_genre/', views.GenreCreate.as_view(), name='create_genre'),
+
 ]

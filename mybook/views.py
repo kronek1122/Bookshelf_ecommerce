@@ -18,7 +18,7 @@ from statistics import mean
 from datetime import datetime
 
 from .forms import UserDataChangeForm, UsernameChangeForm, PostForm
-from .models import Book, UserShelf, BookOpinion, UserFollow, Post, Author
+from .models import Book, UserShelf, BookOpinion, UserFollow, Post, Author, Genre
 from .utils import get_book_cover_info
 
 
@@ -414,6 +414,15 @@ class AuthorCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Author
     success_url = reverse_lazy('mybook:create_author')
     fields = ['first_name', 'last_name']
+    
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_staff
+
+
+class GenreCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Genre
+    success_url = reverse_lazy('mybook:create_genre')
+    fields = ['name']
     
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_staff
