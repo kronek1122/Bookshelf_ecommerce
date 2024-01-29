@@ -28,23 +28,60 @@
                         {% for book in read_books %}
                             <li class="list-group-item">
                                 <a href="/mybook/book/{{ book.id }}">{{ book.title }} written by {{ book.author }}</a>
+                                <button type="button" class="btn btn-sm btn-light text-secondary" data-bs-toggle="modal" data-bs-target="#EditOpinion-{{ book.id }}">
+                                    edit
+                                </button>
+                                <div class="modal fade" id="EditOpinion-{{ book.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="EditOpinionLabel-{{ book.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="EditOpinionLabel-{{ book.id }}">Edit opinion</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            
+                                                <form method="post" action="{% url 'mybook:profile' %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="edit_book">
+                                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                                    <div  class="container mt-3">
+                                                        <div class="mb-3">
+                                                            <label for="read_date" class="form-label">Read Date:</label>
+                                                            <input type="date" name="read_date" id="read_date" class="form-control">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="rating" class="form-label">Rating (1-10):</label>
+                                                            <input type="number" name="rating" id="rating" class="form-control" min="1" max="10">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="review" class="form-label">Review:</label>
+                                                            <textarea name="review" id="review" class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                    </div>
+                                                </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <form action="{% url 'mybook:profile' %}" method="post" class="d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="remove_book">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
-                                    <button type="submit" class="btn btn-sm btn-light text-secondary">X</button>
+                                    <button type="submit" class="btn btn-sm btn-light text-secondary">delete</button>
                                 </form>
                                 {% for opinion in user_opinions %}
-                                    {% if opinion.book == book %}
+                                {% if opinion.book == book %}
                                         <p class="mt-2">
                                             <strong>Readed:</strong> {{ opinion.read_date }} <br>
                                             <strong>Rating:</strong> {{ opinion.rating }} <br>
                                             <strong>Review:</strong> {{ opinion.review }}
+
                                             <form action="{% url 'mybook:profile' %}" method="post" class="d-inline">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="action" value="delete_opinion">
                                                 <input type="hidden" name="opinion_id" value="{{ opinion.id }}">
-                                                <button type="submit" class="btn btn-sm btn-light text-secondary">X</button>
+                                                <button type="submit" class="btn btn-sm btn-light text-secondary">delete review</button>
                                             </form>
                                         </p>
                                     {% endif %}
@@ -68,17 +105,18 @@
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="remove_to_read_book">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
-                                    <button type="submit" class="btn btn-sm btn-light text-secondary">X</button>
+                                    <button type="submit" class="btn btn-sm btn-light text-secondary">delete</button>
                                 </form>
                             </li>
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <p>No books in to-read list yet.</p>
+                <p>No books in to-read list yet.</p>
                 {% endif %}
             </div>
         </div>
     </div>
+    
 </body>
 
 {% endblock content%}
