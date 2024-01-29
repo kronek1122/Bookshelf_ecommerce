@@ -101,9 +101,11 @@ def user_view(request):
                 BookOpinion.objects.filter(shelf=user_shelf, book_id=book_id).delete()
             except UserShelf.DoesNotExist:
                 pass
+
         elif action == 'remove_to_read_book':
             book_id = request.POST.get('book_id')
             user_shelf.to_read_books.remove(book_id)
+
         elif action == 'delete_opinion':
             opinion_id = request.POST.get('opinion_id')
             try:
@@ -111,6 +113,39 @@ def user_view(request):
                 BookOpinion.objects.filter(shelf=user_shelf, id=opinion_id).delete()
             except UserShelf.DoesNotExist:
                 pass
+
+        elif action == 'edit_book':
+            book_id = request.POST.get('book_id')
+
+            try:
+                read_book = BookOpinion.objects.get(
+                    book=book_id,
+                    shelf=user_shelf,
+                )
+            except BookOpinion.DoesNotExist: 
+                book = Book.objects.get(pk=book_id)
+                read_book, created = BookOpinion.objects.get_or_create(
+                    book=book,
+                    shelf=user_shelf,
+                    defaults={'read_date': timezone.now().date(), 'review': '', 'rating': None}
+
+                )
+
+            review = request.POST.get('review')
+            rating = request.POST.get('rating')
+            read_date = request.POST.get('read_date')
+
+            if review:
+                read_book.review = review
+
+            if rating:
+                read_book.rating = int(rating)
+
+            if read_date:
+                read_book.read_date = read_date
+
+            read_book.save()
+
         return HttpResponseRedirect(request.path)
 
     return render(request, 'mybook/profile.html', context)
@@ -288,7 +323,6 @@ class BookDetail(DetailView):
             rating = self.request.POST.get('rating')
             read_date = self.request.POST.get('read_date')
 
-
             if review:
                 read_book.review = review
 
@@ -331,6 +365,7 @@ class BookList(ListView):
 
         return queryset
 
+
 class UserPasswordChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
 
@@ -360,6 +395,7 @@ class UsernameChangeView(LoginRequiredMixin, PasswordChangeView):
         kwargs['user'] = self.request.user
         return kwargs
 
+
 class UsernameChangeDoneView(PasswordChangeDoneView):
     template_name = 'registration/username_change_done.html'
 
@@ -385,7 +421,6 @@ class FollowList(LoginRequiredMixin,ListView):
     model=UserFollow
     template_name = 'mybook/follow_list.html'
     context_object_name = 'user_list'
-
 
     def get_queryset(self) -> QuerySet[Any]:
         try:
