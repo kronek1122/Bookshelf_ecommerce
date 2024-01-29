@@ -400,13 +400,24 @@ class FollowList(LoginRequiredMixin,ListView):
 def board(request):
     posts = Post.objects.order_by('-created_at')
     if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
-            return redirect('mybook:board')
+        action = request.POST.get('action')
+        if action == 'create_post':
+            form = PostForm(request.POST)
+            if form.is_valid():
+                form.instance.user = request.user
+                form.save()
+                return redirect('mybook:board')
+        elif action == 'delete_post':
+            post_id = request.POST.get('post_id')
+            try:
+                Post.objects.filter(user=request.user, id=post_id).delete()
+            except Post.DoesNotExist:
+                pass
+        return HttpResponseRedirect(request.path)
+
     else:
         form = PostForm()
+
     return render(request, 'mybook/board.html', {'posts': posts, 'form': form})    
 
 
