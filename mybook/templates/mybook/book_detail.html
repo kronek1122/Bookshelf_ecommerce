@@ -67,7 +67,7 @@
             {% for opinion in opinions %}
                 <div class="card mb-2">
                     <div class="card-body">
-                        <strong>User:</strong> {{ opinion.shelf.user.username }}<br>
+                        <strong>User:</strong><a href="/mybook/user/{{ opinion.shelf.user.username }}"> {{ opinion.shelf.user.username }}<br></a>
                         
                         {% if opinion.read_date %}
                             <strong>Read date:</strong> {{ opinion.read_date }}<br>
