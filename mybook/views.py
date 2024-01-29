@@ -49,6 +49,16 @@ def home(request):
 @login_required
 def user_view(request):
 
+    user_shelf = None
+    user_opinions = []
+    read_books = []
+    to_read_books = []
+    read_books_this_month = []
+    read_books_this_year = []
+    user_follow_list = None
+    followers_list = []
+    following_list = []
+
     try:
         user_shelf = UserShelf.objects.get(user=request.user)
         user_opinions = BookOpinion.objects.filter(shelf=user_shelf)
