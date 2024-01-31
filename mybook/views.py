@@ -154,6 +154,9 @@ def user_view(request):
 class AnotherUserView(View):
 
     def get(self, request, username=None):
+
+        if request.user.username == username:
+            return redirect('mybook:profile')
         try:
             is_following = False
             current_user = UserFollow.objects.get(user=self.request.user)

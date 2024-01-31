@@ -38,11 +38,7 @@
                     {% endif %}
                 </div>
             </div>
-            {% if user.id == user_profile.id %}
-            <h2 class="mb-3">Welcome, {{ user.username }}!</h2>
-            {% else %}
             <h2 class="mb-3">Welcome on '{{ user_profile.username }}' profile!</h2>
-            {% endif %}
         <div class="row">
             <div class="col-md-3">
                 <h4 class="mt-4 mb-3">Statistics:</h4>
