@@ -293,7 +293,7 @@ class BookDetail(DetailView):
         context['opinions'] = book.get_opinions()
 
         ratings = [opinion.rating for opinion in context['opinions'] if opinion.rating is not None]
-        context['average_rating'] = mean(ratings) if ratings else None
+        context['average_rating'] = round(mean(ratings), 1) if ratings else None
 
         cover_info = get_book_cover_info(book.isbn)
         context['cover_url'] = cover_info['large'] if cover_info else None
