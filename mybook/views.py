@@ -266,6 +266,11 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'mybook/signup.html'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Your account has been successfully registered')
+        return response
+
 
 class BookCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Book
