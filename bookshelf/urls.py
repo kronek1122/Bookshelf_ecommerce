@@ -25,4 +25,5 @@ urlpatterns = [
     path('mybook/', include('mybook.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('messages/', include('postman.urls', namespace='postman')),
+    path('bookshop/', include('bookshop.urls')),
 ]
