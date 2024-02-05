@@ -38,7 +38,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mybook.apps.MybookConfig',
-    'boohshop.apps.BookshopConfig',
+    'bookshop.apps.BookshopConfig',
     'postman',
     'django.contrib.admin',
     'django.contrib.auth',
