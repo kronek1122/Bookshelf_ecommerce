@@ -19,6 +19,7 @@ from datetime import datetime
 
 from .forms import UserDataChangeForm, UsernameChangeForm, PostForm
 from .models import Book, UserShelf, BookOpinion, UserFollow, Post, Author, Genre
+from bookshop.models import BookInventory
 from .utils import get_book_cover_info
 
 
@@ -299,6 +300,8 @@ class BookDetail(DetailView):
         context['cover_url'] = cover_info['large'] if cover_info else None
 
         context['description'] = book.description
+
+        context['book_inventory'] = BookInventory.objects.get(book=book)
 
         return context
 
