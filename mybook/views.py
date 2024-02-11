@@ -313,7 +313,7 @@ class BookDetail(DetailView):
         elif action == 'add_to_to_read':
             self.add_book_to_shelf('to_read', 'To Read')
         elif action == 'add_to_shopping_cart':
-            self.add_book_shopping_cart() 
+            self.add_book_to_shopping_cart() 
         else:
             messages.warning(request, 'Invalid action.')
 
@@ -356,11 +356,10 @@ class BookDetail(DetailView):
             user_shelf.to_read_books.add(book)
             messages.success(self.request, f'Added "{book.title}" to your {shelf_name} books.')
         
-    def add_book_shopping_cart(self):
+    def add_book_to_shopping_cart(self):
         book = self.get_object()
         purchased_book = BookInventory.objects.get(book=book)
         user_shopping_cart, created = UserShoppingCart.objects.get_or_create(user=self.request.user)
-
 
         user_shopping_cart.books_to_buy.add(purchased_book)
         messages.success(self.request, f'Added "{book.title}" to your shopping cart')
