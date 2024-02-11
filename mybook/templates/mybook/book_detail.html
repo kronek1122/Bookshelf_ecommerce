@@ -14,14 +14,22 @@
 <body>
     <div class="container mt-3">
         <div class="row justify-content-end">
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-3">
                 {% if user.is_authenticated %}
-                    <button type="button" class="btn btn-primary w-90 mt-2" data-bs-toggle="modal" data-bs-target="#AddToShelf">
+                    <button type="button" class="btn btn-primary w-80 mt-1" data-bs-toggle="modal" data-bs-target="#AddToShelf">
                         Add to bookshelf
                     </button>
                 {% else %}
                     <a href="/accounts/login" class=" px-2 text-blue">Login to add book to bookshelf</a>
                 {% endif %}
+                    <form method="post" action="{% url 'mybook:book_detail' pk=book_detail.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_to_shopping_cart">
+                        <input type="hidden" name="book_id" value="{{ book.id }}">
+                        <button type="submit" class="btn btn-success w-80 mt-1" data-bs-toggle="modal" data-bs-target="#AddToShoppingCart">
+                            Add to shopping cart
+                        </button>
+                    </form>
             </div>
         </div>
 
@@ -136,6 +144,23 @@
                             <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                     </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="AddToShoppingCart" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="AddToShoppingCartLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="AddToShoppingCart">Added to user shopping cart</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                    <button type="button"  class="btn btn-primary">Go to shopping cart</button>
                 </div>
             </div>
           </div>
