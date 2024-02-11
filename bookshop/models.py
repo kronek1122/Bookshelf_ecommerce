@@ -11,5 +11,5 @@ class BookInventory(models.Model):
 
 
 class UserShoppingCart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     books_to_buy = models.ManyToManyField(BookInventory, related_name='books_to_buy', blank=True)
