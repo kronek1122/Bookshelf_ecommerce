@@ -301,8 +301,10 @@ class BookDetail(DetailView):
 
         context['description'] = book.description
 
-        context['book_inventory'] = BookInventory.objects.get(book=book)
-
+        try:
+            context['book_inventory'] = BookInventory.objects.get(book=book)
+        except BookInventory.DoesNotExist:
+            context['book_inventory'] = None
         return context
 
     def post(self, request, *args, **kwargs):
