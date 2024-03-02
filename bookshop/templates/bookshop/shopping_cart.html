@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="mt-5 mb-4">Shopping Cart</h1>
+    <div class="row">
+      <div class="col-md-8">
+        <form method="post">
+          {% csrf_token %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in cart_items %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="/mybook/book/{{ item.book.id }}">{{ item.book }}</a></td>
+                <td>{{ item.price }}</td>
+                <td><input type="number" name="quantity_{{ item.book.id }}" value="1" min="1"></td>
+                <td>{{ item.price }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <button type="submit" class="btn btn-primary">Update Cart</button>
+        </form>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Summary</h5>
+            <p class="card-text">Total items: {{ total_items }}</p>
+            <p class="card-text">Total cost: ${{ total_cost }}</p>
+            <a href="#" class="btn btn-primary">Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content%}
