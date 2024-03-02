@@ -15,7 +15,8 @@ class BookInventory(models.Model):
 
 class UserShoppingCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    books_to_buy = models.ManyToManyField(BookInventory, related_name='books_to_buy', blank=True)
+    book_inventory = models.ForeignKey(BookInventory, on_delete=models.CASCADE, default=None)
+    quantity_in_cart = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.user} shopping cart"
